@@ -1,0 +1,20 @@
+{{- if .Values.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "my-app.fullname" . }}
+  labels:
+    {{- include "my-app.labels" . | nindent 4 }}
+spec:
+  {{- if .Values.ingress.defaultBackend }}
+  defaultBackend:
+    service:
+      name: {{ .Values.ingress.defaultBackend.service.name }}
+      port:
+        number: {{ .Values.ingress.defaultBackend.service.port.number }}
+  {{- end }}
+  {{- if .Values.ingress.rules }}
+  rules:
+    {{- toYaml .Values.ingress.rules | nindent 4 }}
+  {{- end }}
+{{- end }}
